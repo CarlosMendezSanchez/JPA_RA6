@@ -1,5 +1,7 @@
 package com.hlc.usuario_uno_a_uno.config;
 
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.github.javafaker.Faker;
 import com.hlc.usuario_uno_a_uno.entidad.InformacionUsuario;
 import com.hlc.usuario_uno_a_uno.entidad.Usuario;
+import com.hlc.usuario_uno_a_uno.entidad.enumerado.Rol;
 import com.hlc.usuario_uno_a_uno.repositorio.UsuarioRepositorio;
 
 import jakarta.transaction.Transactional;
@@ -16,6 +19,9 @@ public class InicializarDatos implements CommandLineRunner {
 
     private final UsuarioRepositorio usuarioRepositorio;
     private final Faker faker = new Faker();
+    
+    Random random = new Random();
+    Rol[] roles = Rol.values();
 
     public InicializarDatos(UsuarioRepositorio usuarioRepositorio) {
         this.usuarioRepositorio = usuarioRepositorio;
@@ -32,7 +38,8 @@ public class InicializarDatos implements CommandLineRunner {
             String password = faker.internet().password(8, 12);
 
             InformacionUsuario info = new InformacionUsuario(email, telefono);
-            Usuario usuario = new Usuario(username, password, info);
+            Rol rolAleatorio = roles[random.nextInt(roles.length)];
+            Usuario usuario = new Usuario(username, password, info, rolAleatorio);
             info.setUsuario(usuario);
 
             usuarioRepositorio.save(usuario);

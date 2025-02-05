@@ -2,6 +2,7 @@ package com.hlc.usuario_uno_a_uno.controlador;
 
 import com.hlc.usuario_uno_a_uno.entidad.InformacionUsuario;
 import com.hlc.usuario_uno_a_uno.entidad.Usuario;
+import com.hlc.usuario_uno_a_uno.entidad.enumerado.Rol;
 import com.hlc.usuario_uno_a_uno.servicio.UsuarioServicio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ public class UsuarioControladorTest {
     @BeforeEach
     void setUp() {
         infoUsuario = new InformacionUsuario("user@email.com", "123456789");
-        usuario = new Usuario("testuser", "password123", infoUsuario);
+        usuario = new Usuario("testuser", "password123", infoUsuario, Rol.USUARIO);
         infoUsuario.setUsuario(usuario);
         usuario.setId(1L);
     }
@@ -94,7 +95,7 @@ public class UsuarioControladorTest {
 
     @Test
     void testGuardarUsuarioSinInformacionUsuario() {
-        Usuario usuarioSinInfo = new Usuario("user2", "password456", null);
+        Usuario usuarioSinInfo = new Usuario("user2", "password456", null, null);
         when(bindingResult.hasErrors()).thenReturn(false);
 
         String view = usuarioControlador.guardarUsuario(usuarioSinInfo, bindingResult, model);

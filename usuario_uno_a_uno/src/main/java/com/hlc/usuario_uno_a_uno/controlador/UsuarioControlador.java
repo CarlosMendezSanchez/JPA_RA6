@@ -2,6 +2,7 @@ package com.hlc.usuario_uno_a_uno.controlador;
 
 import com.hlc.usuario_uno_a_uno.entidad.InformacionUsuario;
 import com.hlc.usuario_uno_a_uno.entidad.Usuario;
+import com.hlc.usuario_uno_a_uno.entidad.enumerado.Rol;
 import com.hlc.usuario_uno_a_uno.servicio.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,8 @@ public class UsuarioControlador {
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", usuarios.getTotalPages());
+        model.addAttribute("roles", Rol.values());
+        
         return "usuarios/listar";
     }
 
@@ -41,7 +44,8 @@ public class UsuarioControlador {
         Usuario usuario = new Usuario();
         InformacionUsuario informacionUsuario = new InformacionUsuario();
     	usuario.setInformacionUsuario(informacionUsuario); // Inicializa la relación 1:1      
-
+    	
+    	model.addAttribute("roles", Rol.values());
     	model.addAttribute("usuario", usuario);
         return VISTA_FORMULARIO;
     }
@@ -50,6 +54,7 @@ public class UsuarioControlador {
     public String guardarUsuario(@Valid @ModelAttribute Usuario usuario, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("usuario", usuario);
+        	model.addAttribute("roles", Rol.values());
             return VISTA_FORMULARIO;
         }
 
@@ -70,7 +75,7 @@ public class UsuarioControlador {
         if (usuario.getInformacionUsuario() == null) {
             usuario.setInformacionUsuario(new InformacionUsuario());
         }
-
+    	model.addAttribute("roles", Rol.values());
         model.addAttribute("usuario", usuario);
         return VISTA_FORMULARIO;
     }
@@ -78,6 +83,21 @@ public class UsuarioControlador {
     public String eliminarUsuario(@PathVariable Long id) {
         usuarioServicio.eliminarUsuario(id);
         return REDIRECT_LISTADO;
+    }
+    
+    @GetMapping("/filtrar")
+    public String filtrarRoles(@RequestParam String rol,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "10") int size,
+                                 Model model) {
+    	
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Usuario> usuarios = usuarioServicio.buscarPorRol(Rol.valueOf(rol), pageable);
+        model.addAttribute("usuarios", usuarios);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", usuarios.getTotalPages());
+        model.addAttribute("roles", Rol.values());
+        return "usuarios/listar";
     }
 
     @GetMapping("/buscar")
@@ -91,6 +111,7 @@ public class UsuarioControlador {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", usuarios.getTotalPages());
         model.addAttribute("nombre", nombre);
+        model.addAttribute("roles", Rol.values());
         return "usuarios/listar";
     }
 }

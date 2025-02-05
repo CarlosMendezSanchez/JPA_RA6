@@ -1,16 +1,21 @@
 package com.hlc.usuario_uno_a_uno.entidad;
 
+import com.hlc.usuario_uno_a_uno.entidad.enumerado.Rol;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 
 @Entity
@@ -32,14 +37,20 @@ public class Usuario {
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private InformacionUsuario informacionUsuario;
     
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
+    
+    
     // Constructor vacío
     public Usuario() {}
     
     // Constructor con parámetros
-    public Usuario(String username, String password, InformacionUsuario informacionUsuario) {
+    public Usuario(String username, String password, InformacionUsuario informacionUsuario, Rol rol) {
         this.username = username;
         this.password = password;
         this.informacionUsuario = informacionUsuario;
+        this.rol = rol;
     }
     
     // Getters y Setters
@@ -74,4 +85,14 @@ public class Usuario {
     public void setInformacionUsuario(InformacionUsuario informacionUsuario) {
         this.informacionUsuario = informacionUsuario;
     }
+
+	public Rol getRol() {
+		return rol;
+	}
+
+	public void setRol(Rol rol) {
+		this.rol = rol;
+	}
+    
+    
 }
