@@ -56,11 +56,11 @@ public class Cliente {
 		this.nombre = nombre;
 	}
 
-	public List<Pedido> getLibros() {
+	public List<Pedido> getPedidos() {
 		return pedidos;
 	}
 
-	public void setLibros(List<Pedido> pedidos) {
+	public void setPedidos(List<Pedido> pedidos) {
 		this.pedidos = pedidos;
 	}
 
