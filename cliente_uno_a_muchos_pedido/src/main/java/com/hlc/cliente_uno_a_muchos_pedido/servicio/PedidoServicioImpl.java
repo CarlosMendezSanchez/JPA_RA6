@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hlc.cliente_uno_a_muchos_pedido.entidad.Cliente;
 import com.hlc.cliente_uno_a_muchos_pedido.entidad.Pedido;
 import com.hlc.cliente_uno_a_muchos_pedido.excepcion.RecursoNoEncontradoException;
 import com.hlc.cliente_uno_a_muchos_pedido.repositorio.PedidoRepository;
@@ -46,5 +47,11 @@ public class PedidoServicioImpl implements PedidoServicio {
         Pedido pedido = obtenerPedidoPorId(id);
         pedidoRepository.delete(pedido);
     }
+
+    @Override
+    public List<Pedido> obtenerPedidosPorCliente(Cliente cliente) {
+        return pedidoRepository.findByCliente(cliente);
+    }
+
 
 }
